@@ -1,4 +1,3 @@
----
 - name: install pgbouncer
   apt:
     pkg: pgbouncer
@@ -11,6 +10,17 @@
     pkg: postgresql-client
     state: present
   when: pgbouncer_install_psql
+
+- name: Create userlist.txt
+  command: psql -Upostgres -q -d postgres -c "COPY (SELECT usename, passwd FROM pg_shadow WHERE usename='pgbouncer') TO '/etc/pgbouncer/userlist.txt' WITH (FORMAT CSV, DELIMITER ' ', FORCE_QUOTE *)"
+
+- name: Move functions to server
+  copy:
+    src: files/function.sql
+    dest: /tmp/function.sql
+
+- name: Create userlist.txt
+  command: psql -Upostgres < /tmp/function.sql
 
 - name: template config files
   template:
