@@ -20,7 +20,7 @@
     dest: /tmp/function.sql
 
 - name: Create userlist.txt
-  command: psql -Upostgres < /tmp/function.sql
+  command: psql -Upostgres -f /tmp/function.sql
 
 - name: template config files
   template:
