@@ -16,7 +16,7 @@
 
 - name: Move functions to server
   copy:
-    src: files/function.sql
+    src: "{{ role_path }}/files/function.sql"
     dest: /tmp/function.sql
 
 - name: Create userlist.txt
