@@ -19,8 +19,9 @@
     src: "{{ role_path }}/files/function.sql"
     dest: /tmp/function.sql
 
-- name: Create userlist.txt
-  command: psql -Upostgres -f /tmp/function.sql
+- name: Run function.sql
+  command: psql -Upostgres -f /tmp/function.sql {{ item.name }}
+  loop: "{{ postgresql_databases }}"
 
 - name: template config files
   template:
@@ -31,4 +32,4 @@
     group: postgres
     mode: 0640
   with_fileglob: templates/*
-  notify: "{{ pgbouncer_service_state }} pgbouncer"
+  notify: "restart pgbouncer"
